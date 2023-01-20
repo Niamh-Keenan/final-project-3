@@ -4,6 +4,9 @@ enum SpriteKindLegacy {
     Food,
     Enemy
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    game.reset()
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     nextCard = myShoe.nextCard
     mySprite2 = sprites.create(img`
@@ -28,6 +31,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite2.say(nextCard.name)
     pause(2000)
     mySprite2.sayText("Hit or stand?")
+    total = nextCard.faceValue
+    info.setScore(total)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     for (let index = 0; index < 3; index++) {
@@ -55,13 +60,19 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         pause(1000)
         mySprite4.say(nextcard3.name)
     }
-    dealerTotal = nextcard3.faceValue + nextcard2.faceValue
-    if (true) {
-    	
+    dealerTotal = nextcard3.faceValue
+    if (dealerTotal < total) {
+        game.over(true, effects.confetti)
+        game.splash(dealerTotal)
+    } else if (dealerTotal > total) {
+        game.over(false, effects.dissolve)
+        game.splash(dealerTotal)
+    } else if (dealerTotal == total) {
+        game.splash("Draw! Press B to restart")
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    nextcard2 = myShoe.nextCard
+    nextCard = myShoe.nextCard
     mySprite3 = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -80,11 +91,11 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Player)
-    mySprite3.setImage(myShoe.getCardImage(nextcard2, CardSpriteSize.ThirtyTwoByThirtyTwo))
-    mySprite3.say(nextcard2.name)
+    mySprite3.setImage(myShoe.getCardImage(nextCard, CardSpriteSize.ThirtyTwoByThirtyTwo))
+    mySprite3.say(nextCard.name)
     pause(2000)
     mySprite3.sayText("Hit or stand?")
-    total = nextCard.faceValue + nextcard2.faceValue
+    total = nextCard.faceValue + nextCard.length
     info.setScore(total)
     if (total > 21) {
         game.over(false)
@@ -92,12 +103,11 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         game.over(true)
     }
 })
-let total = 0
 let mySprite3: Sprite = null
-let nextcard2: Card = null
 let dealerTotal = 0
 let mySprite4: Sprite = null
 let nextcard3: Card = null
+let total = 0
 let mySprite2: Sprite = null
 let nextCard: Card = null
 let myShoe: Shoe = null
