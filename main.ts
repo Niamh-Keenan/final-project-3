@@ -62,17 +62,17 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     }
     dealerTotal = nextcard3.faceValue
     if (dealerTotal < total) {
+        game.splash(dealerTotal)
         game.over(true, effects.confetti)
-        game.splash(dealerTotal)
     } else if (dealerTotal > total) {
-        game.over(false, effects.dissolve)
         game.splash(dealerTotal)
+        game.over(false, effects.dissolve)
     } else if (dealerTotal == total) {
         game.splash("Draw! Press B to restart")
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    nextCard = myShoe.nextCard
+    nextcard2 = myShoe.nextCard
     mySprite3 = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -91,11 +91,33 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Player)
-    mySprite3.setImage(myShoe.getCardImage(nextCard, CardSpriteSize.ThirtyTwoByThirtyTwo))
-    mySprite3.say(nextCard.name)
+    mySprite3.setImage(myShoe.getCardImage(nextcard2, CardSpriteSize.ThirtyTwoByThirtyTwo))
+    mySprite3.say(nextcard2.name)
     pause(2000)
     mySprite3.sayText("Hit or stand?")
-    total = nextCard.faceValue + nextCard.length
+    Nextcard4 = myShoe.nextCard
+    Mysprite5 = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Player)
+    Mysprite5.say(Nextcard4.name)
+    Mysprite5.setImage(myShoe.getCardImage(nextcard2, CardSpriteSize.ThirtyTwoByThirtyTwo))
+    pause(2000)
+    total = nextCard.faceValue + (nextcard2.faceValue + Nextcard4.faceValue)
     info.setScore(total)
     if (total > 21) {
         game.over(false)
@@ -103,7 +125,10 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         game.over(true)
     }
 })
+let Mysprite5: Sprite = null
+let Nextcard4: Card = null
 let mySprite3: Sprite = null
+let nextcard2: Card = null
 let dealerTotal = 0
 let mySprite4: Sprite = null
 let nextcard3: Card = null
